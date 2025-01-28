@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 
 import { readAsStringAsync, EncodingType } from "expo-file-system";
 import { launchImageLibraryAsync } from "expo-image-picker";
@@ -45,12 +45,12 @@ function useImages() {
     }
 }
 
-export default function Images() {
+export default function Images({ children }: { children: React.ReactNode }) {
     const { images, onPickImage } = useImages();
 
     return (
         <View style={styles.container}>
-            {images}
+            {images || children}
             <Button title="Image" onPress={onPickImage} />
         </View>
     )
