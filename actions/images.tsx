@@ -12,6 +12,14 @@ export interface StoredImage {
 
 const IMAGES_JSON_PATH = path.join(".", "images.json");
 
+export const getImages = async (): Promise<StoredImage[]> => {
+    if (!fs.existsSync(IMAGES_JSON_PATH)) {
+        return [];
+    }
+    const jsonContent = fs.readFileSync(IMAGES_JSON_PATH, "utf-8");
+    return JSON.parse(jsonContent) || [];
+}
+
 export async function postImage({
     name: originalFileName,
     image,
@@ -38,7 +46,7 @@ export async function postImage({
         const filePath = path.join(dir, name);
         fs.writeFileSync(filePath, buffer);
 
-        const images: StoredImage[] = [];
+        const images: StoredImage[] = await getImages()
 
         images.push({
             fileName: name,
