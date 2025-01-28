@@ -1,7 +1,8 @@
 "use server";
+import ImagesList from "@/components/images-list";
 import fs from "node:fs";
 import path from "node:path";
-import { buffer } from "node:stream/consumers";
+import { Text, View } from "react-native";
 
 export interface StoredImage {
     fileName: string;
@@ -18,6 +19,18 @@ export const getImages = async (): Promise<StoredImage[]> => {
     }
     const jsonContent = fs.readFileSync(IMAGES_JSON_PATH, "utf-8");
     return JSON.parse(jsonContent) || [];
+}
+
+
+export const getImagesList = async (): Promise<React.ReactNode> => {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    const images = await getImages();
+    return (
+        <View>
+            <Text style={{ fontSize: 24, fontWeight: '600', paddingHorizontal: 12, paddingBottom: 12 }}>Images</Text>
+            <ImagesList images={images} />
+        </View>
+    )
 }
 
 export async function postImage({
